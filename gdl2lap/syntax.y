@@ -30,39 +30,36 @@ arg_lst: args |
 		 args arg_lst ;
 args: 	 t_NUM | t_VAR | axiom | distinct;
 
-axiom:	 t_AXIOM | 
-		 t_AXIOM arg_lst ;
+axiom:	 t_OP t_AXIOM arg_lst t_CP |
+		 t_AXIOM ;
 
 
 rules:     t_OP rules_aux t_CP |
 		   t_OP rules_aux t_CP rules ;
-rules_aux: t_RELATION t_OP rule_head t_OP rule_body |
-   		   t_RELATION terminal rule_body|		  
+rules_aux: t_RELATION rule_head rule_body |
 		   move_update |
-		   statement ;
-
+		   terminal ;
 
 rule_head: next | legal | goal | new_rule ;
-next:      t_NEXT arg_lst;
-legal:     t_LEGAL player arg_lst;
-goal:      t_GOAL player score;
-new_rule:  t_AXIOM | t_AXIOM arg_lst ;
-terminal:  t_TERMINAL;
+rule_body: true rule_body | 
+		   does rule_body |
+		   not  rule_body |
+		   distinct rule_body | ;
 
+next:     t_OP t_NEXT arg_lst t_CP;
+legal:    t_OP t_LEGAL player arg_lst t_CP ;
+goal:     t_OP t_GOAL player score t_CP;
+terminal: t_TERMINAL;
 
-
-rule_body: t_OP body_aux t_CP | 
-		   t_OP body_aux t_CP rule_body | ;
-body_aux:  true | does | not | distinct | axiom;
-true:      t_TRUE arg_lst ;
-does:      t_DOES player axiom;
-not:       t_NOT axiom ;
-distinct:  t_DISTINCT arg_lst;
-
+true: 	  t_OP t_TRUE arg_lst t_CP ;
+does: 	  t_OP t_DOES player axiom t_CP;
+not:  	  t_OP t_NOT axiom t_CP;
+distinct: t_OP t_DISTINCT arg_lst t_CP ;
+new_rule: t_AXIOM |
+		  t_OP t_AXIOM t_CP |
+		  t_OP t_AXIOM arg_lst t_CP ;
 
 move_update: does;
-statement:   axiom;
-
 
 player: t_AXIOM | t_VAR ;
 score:  t_NUM ;
