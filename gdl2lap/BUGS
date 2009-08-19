@@ -1,0 +1,4 @@
+É sabido que a gramática não suporta 
+  - contruções atómicas entre parêntesis
+  	(<= next (update_row))
+

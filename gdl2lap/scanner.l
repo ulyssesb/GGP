@@ -6,8 +6,7 @@ YYSTYPE yylval ;
 
 %}
 
-DIGIT [[:digit:]]
-AXIOM [[:alnum:]]*
+AXIOM [[:alnum:]\+\-\_\#\|\<\>]*
 
 %x comment
 
@@ -40,6 +39,7 @@ z [Zz]
 
 %%
 
+or       return t_OR;
 role     return t_ROLE;
 init     return t_INIT;
 true     return t_TRUE;
@@ -56,8 +56,7 @@ distinct return t_DISTINCT;
 ")"  return t_CP;
 
 "?"{AXIOM} yylval = strdup(yytext); return t_VAR;
-{DIGIT}+   yylval = strdup(yytext); return t_NUM; 
-{AXIOM}+   yylval = strdup(yytext); return t_AXIOM;
+{AXIOM}+   yylval = strdup(yytext); return t_ATOM;
 
 
 ";".*

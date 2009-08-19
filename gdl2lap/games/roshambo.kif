@@ -1,0 +1,76 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Roshambo
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (role white)
+  (role black)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (init (step 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (next (threw ?player ?throw))
+     (does ?player ?throw))
+
+  (<= (next (step ?y))
+      (true (step ?x))
+      (succ ?x ?y))
+
+  (succ 1 2)
+  (succ 2 3)
+  (succ 3 4)
+  (succ 4 5)
+  (succ 5 6)
+  (succ 6 7)
+  (succ 7 8)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (legal ?role rock) (role ?role))
+  (<= (legal ?role paper) (role ?role))
+  (<= (legal ?role scissors) (role ?role))
+
+  (beats rock scissors)
+  (beats paper rock)
+  (beats scissors paper)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (<= (goal white 100)
+     (true (threw white ?throw1))
+     (true (threw black ?throw2))
+     (beats ?throw1 ?throw2))
+
+  (<= (goal white 0)
+     (true (threw white ?throw1))
+     (true (threw black ?throw2))
+     (beats ?throw2 ?throw1))
+    
+  (<= (goal black 100)
+     (true (threw white ?throw1))
+     (true (threw black ?throw2))
+     (beats ?throw2 ?throw1))
+
+  (<= (goal black 0)
+     (true (threw white ?throw1))
+     (true (threw black ?throw2))
+     (beats ?throw1 ?throw2))
+ 
+  (<= (goal ?role 50)
+     (true (step 8))
+     (role ?role))
+    
+
+  (<= terminal
+     (true (threw white ?throw1))
+     (true (threw black ?throw2))
+     (or (beats ?throw1 ?throw2) (beats ?throw2 ?throw1)))
+
+  (<= terminal
+      (true (step 8)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
