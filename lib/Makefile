@@ -1,15 +1,17 @@
-all: gdl2lap clean
+TRASH = syntax.tab.cc syntax.tab.hh lex.yy.cc
 
-gdl2lap: syntax.tab.o lex.yy.o 
-	gcc -o gdl2lap syntax.tab.c -lfl
+all: parserGDL clean
 
-syntax.tab.o: syntax.y
-	bison -d syntax.y
+parserGDL: syntax.tab.o lex.yy.o main.cc
+	g++ -o parserGDL main.cc syntax.tab.o lex.yy.o
+
+syntax.tab.o: syntax.yy
+	bison++ -d -h syntax.tab.hh -o syntax.tab.cc syntax.yy
+	g++ -c syntax.tab.cc -Wno-write-strings
 
 lex.yy.o: scanner.l
-	flex scanner.l
-	gcc -c lex.yy.c -lfl	
+	flex++ scanner.l
+	g++ -c lex.yy.cc
 
 clean:	
-	@rm -f scanner syntax.tab.[ch] lex.yy.c *.out *.o *~ *\;
-
+	@rm -f ${TRASH} *.out *.o *~ *\;

@@ -1,14 +1,14 @@
-%{
-#include <stdio.h>
-#include <string.h>
-#include "syntax.tab.h"
-YYSTYPE yylval ;
+%option c++
+%option noyywrap
 
+%{
+#include <sstream>
+#include "syntax.tab.hh"
+#include <cstdlib>
 %}
 
-AXIOM [[:alnum:]\+\-\_\#\|\<\>]*
 
-%x comment
+AXIOM [[:alnum:]\+\-\_\#\|\<\>]*
 
 a [Aa]
 b [Bb]
@@ -39,24 +39,24 @@ z [Zz]
 
 %%
 
-or       return t_OR;
-role     return t_ROLE;
-init     return t_INIT;
-true     return t_TRUE;
-does     return t_DOES;
-next     return t_NEXT;
-legal    return t_LEGAL;
-goal     return t_GOAL;
-not      return t_NOT;
-terminal return t_TERMINAL;
-distinct return t_DISTINCT;
+or       return GDLParser::t_OR;
+role     return GDLParser::t_ROLE;
+init     return GDLParser::t_INIT;
+true     return GDLParser::t_TRUE;
+does     return GDLParser::t_DOES;
+next     return GDLParser::t_NEXT;
+legal    return GDLParser::t_LEGAL;
+goal     return GDLParser::t_GOAL;
+not      return GDLParser::t_NOT;
+terminal return GDLParser::t_TERMINAL;
+distinct return GDLParser::t_DISTINCT;
 
-"<=" return t_RELATION;
-"("  return t_OP;
-")"  return t_CP;
+"<=" return GDLParser::t_RELATION;
+"("  return GDLParser::t_OP;
+")"  return GDLParser::t_CP;
 
-"?"{AXIOM} yylval = strdup(yytext); return t_VAR;
-{AXIOM}+   yylval = strdup(yytext); return t_ATOM;
+"?"{AXIOM}  return GDLParser::t_VAR;
+{AXIOM}+    return GDLParser::t_ATOM;
 
 
 ";".*

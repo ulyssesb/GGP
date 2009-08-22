@@ -1,9 +1,20 @@
-%{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+%name GDLParser
 
-#define YYSTYPE char *
+%define MEMBERS \
+    virtual ~GDLParser() {} \
+    private: \
+        yyFlexLexer scanner;
+
+%define LEX_BODY {return scanner.yylex();}
+%define ERROR_BODY {fprintf(stderr, "error at line: %d ; %s\n", scanner.lineno(),scanner.YYText());}
+%define SVAL char *
+
+%header{
+#include <iostream>
+#include <fstream>
+#include <FlexLexer.h>
+#include <stdio.h>
+using namespace std;
 %}
 
 %token t_ROLE t_INIT t_TRUE t_DOES t_NEXT t_LEGAL t_GOAL
@@ -31,7 +42,7 @@ arg_lst: arg |
 arg:     t_VAR  | term;
 term:    t_OP t_TRUE     arg_lst t_CP |
          t_OP t_NOT         term t_CP |
-         t_OP t_OR        arg_lst t_CP |
+         t_OP t_OR       arg_lst t_CP |
          t_OP t_DOES     arg_lst t_CP |
          t_OP t_ROLE     arg_lst t_CP |
          t_OP t_LEGAL    arg_lst t_CP |
@@ -59,14 +70,4 @@ rel_body: term | term rel_body ;
 
 %%
 
-int main() {
-    yyparse();
-}
 
-
-int yyerror(char *s){
-    fprintf(stderr,"%s\n", s);
-    return 0;
-}
-
-#include "lex.yy.c"
