@@ -3,7 +3,10 @@
 %define MEMBERS \
     virtual ~GDLParser() {} \
     private: \
-        yyFlexLexer scanner;
+        yyFlexLexer scanner; \
+    public: \
+        GDLStruct gdl;
+
 
 %define LEX_BODY {return scanner.yylex();}
 %define ERROR_BODY {fprintf(stderr, "error at line: %d ; %s\n", scanner.lineno(),scanner.YYText());}
@@ -14,7 +17,8 @@
 #include <fstream>
 #include <FlexLexer.h>
 #include <stdio.h>
-using namespace std;
+
+#include "gdlStruct.hh"
 %}
 
 %token t_ROLE t_INIT t_TRUE t_DOES t_NEXT t_LEGAL t_GOAL
@@ -29,7 +33,7 @@ game_desc: role_set init_set rules;
 
 role_set: role |
           role_set role;
-role:     t_OP t_ROLE t_ATOM t_CP;
+role:     t_OP t_ROLE t_ATOM {gdl.gameRoles.push_back(GDLAtom(scanner.YYText()));} t_CP;
 
 
 init_set: init |
@@ -65,7 +69,7 @@ statement: t_ATOM arg_lst |
 
 
 relation: t_RELATION rel_head rel_body | t_RELATION rel_head ;
-rel_head: t_OP t_NEXT  arg_lst t_CP | term;
+rel_head: t_OP t_NEXT arg_lst t_CP | term;
 rel_body: term | term rel_body ;
 
 %%
