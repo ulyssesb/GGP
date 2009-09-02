@@ -49,7 +49,7 @@ legal    return GDLParser::t_LEGAL;
 goal     return GDLParser::t_GOAL;
 not      return GDLParser::t_NOT;
 terminal return GDLParser::t_TERMINAL;
-distinct return GDLParser::t_DISTINCT;
+distinct return GDLParser::t_DIST;
 
 "<=" return GDLParser::t_RELATION;
 "("  return GDLParser::t_OP;

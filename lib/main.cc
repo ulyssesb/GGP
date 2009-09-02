@@ -17,10 +17,12 @@ int main(int argc, char ** argv)
     cout << endl;
 
     for (i=0 ; i < parser.gdl.gameStatements.size() ; i++){
-        cout << "(" << parser.gdl.gameStatements[i].name;
+        cout << parser.gdl.gameStatements[i].name <<"(";
         
         for (j=0 ; j < parser.gdl.gameStatements[i].args.size() ; j++){
-            cout << " " << parser.gdl.gameStatements[i].args[j].name ;
+            cout << parser.gdl.gameStatements[i].args[j].name ;
+            if ((j+1) < parser.gdl.gameStatements[i].args.size())
+                cout << ",";
         }
         
         cout << ")" << endl;
