@@ -56,7 +56,7 @@ distinct return GDLParser::t_DISTINCT;
 ")"  return GDLParser::t_CP;
 
 "?"{AXIOM}  return GDLParser::t_VAR;
-{AXIOM}+    return GDLParser::t_ATOM;
+{AXIOM}+    return GDLParser::t_ATOM; 
 
 
 ";".*

@@ -7,50 +7,44 @@
 
 using namespace std;
 
-class GDLAtom {
-public:
-    string name;
-
-    GDLAtom();
-    GDLAtom(const string atom_name) {
-        this->name = atom_name;
-    }
-
-    int operator==(const GDLAtom &atom) {
-        if (this->name.compare(atom.name) == 0)
-            return 1;
-        return 0;
-    }
-
-    int operator<(const GDLAtom &atom) {
-        return 0;
-    }
-};
-
 class GDLTerm {
 public:
-    GDLTerm () ;
-
     int arity;
-    GDLAtom functor;
+    string name;
     vector<GDLTerm> args;
+    
+    GDLTerm() {};
+    GDLTerm (string name_, int arity_=0, vector<GDLTerm> args_=vector<GDLTerm>()) {
+        arity = arity_;
+        name = name_;
+        args = args_;
+    }
 
     int operator==(const GDLTerm &term) {
-        return (this->functor == term.functor);
+        return (this->name == term.name);
     }
 
     int operator<(const GDLTerm &term) {
         return 0;
     }
+
+    bool isAtom () {
+        return (this->arity==0)? true : false;
+    }
+};
+
+class GDLPredicate : public GDLTerm {
+public:
+    vector<GDLTerm> rules;
 };
 
 class GDLStruct {
 public:
     GDLStruct(){};
 
-    vector<GDLTerm> gameStatements, gameNexts, gameGoals,
-                    gameTerminals, gameRelations;
-    vector<GDLAtom> gameRoles;
+    vector<GDLTerm> gameStatements;
+    vector<GDLTerm> gameRoles;
+    vector<GDLPredicate> gamePredicates;
 };
 
 extern GDLStruct gdl;
